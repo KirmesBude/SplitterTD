@@ -1,4 +1,3 @@
-
 DEBUG_SPEW = 1
 
 function SplitterTD:InitGameMode()

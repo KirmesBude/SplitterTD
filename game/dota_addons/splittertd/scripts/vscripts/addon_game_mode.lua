@@ -4,9 +4,9 @@ if SplitterTD == nil then
 end
 
 require('internal/util')
+require('splittertd')
 
 require('gamemode')
-require('utilities')
 require('upgrades')
 require('mechanics')
 require('orders')

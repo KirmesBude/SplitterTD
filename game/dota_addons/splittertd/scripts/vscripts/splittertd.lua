@@ -3,7 +3,7 @@
 
 -- Set this to true if you want to see a complete debug output of all events/processes done by splittertd
 -- You can also change the cvar 'splittertd_spew' at any time to 1 or 0 for output/no output
-SPLITTERTD_DEBUG_SPEW = false 
+SPLITTERTD_DEBUG_SPEW = true 
 
 if SplitterTD == nil then
     DebugPrint( '[SPLITTERTD] creating splittertd game mode' )
@@ -22,7 +22,7 @@ require('libraries/notifications')
 require('libraries/animations')
 
 -- These internal libraries set up splittertd's events and processes.  Feel free to inspect them/change them if you need to.
-require('internal/gamemode')
+require('internal/splittertd')
 require('internal/events')
 
 -- settings.lua is where you can specify many different properties for your game mode and is one of the core splittertd files.
@@ -107,15 +107,23 @@ function SplitterTD:OnGameInProgress()
   Timers:CreateTimer(30, -- Start this timer 30 game-time seconds later
     function()
       DebugPrint("This function is called 30 seconds after the game begins, and every 30 seconds thereafter")
+      print("hello1")
+      SpawnWaves()
       return 30.0 -- Rerun this timer every 30 game-time seconds 
     end)
 end
 
-
+function SplitterTD:SpawnWaves()
+	print("hello2")
+	local name = 'wave1'
+	local spawner = Entities:FindByName(nil, 'splitter_spawner')
+	local vec = spawner:GetOrigin()
+	local unit = CreateUnitByName(name, vec, true, nil, nil, DOTA_TEAM_NEUTRALS)
+end
 
 -- This function initializes the game mode and is called before anyone loads into the game
 -- It can be used to pre-initialize any values/tables that will be needed later
-function SplitterTD:InitSplitterTD()
+function SplitterTD:InitGameMode()
   SplitterTD = self
   DebugPrint('[SPLITTERTD] Starting to load SplitterTD gamemode...')
 

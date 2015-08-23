@@ -12,17 +12,24 @@ function Spawn( entityKeyValues )
 	if waypoint then
 		thisEntity:SetInitialGoalEntity( waypoint )
 
-		order.Position = waypoint:GetAbsOrigin
+		order.Position = waypoint:GetAbsOrigin()
 	else
-		print("Could not find waypoint")
+		DebugPrint("Could not find waypoint")
 		local fallback = Entities:FindByName( nil, "the_end" )
-		print("Moving right to the end")
+		DebugPrint("Moving right to the end")
 
 		thisEntity:SetInitialGoalEntity( fallback )
 
-		order.Position = fallback:GetAbsOrigin
+		order.Position = fallback:GetAbsOrigin()
 	end
 
 	ExecuteOrderFromTable(order)
-	
+
 end
+
+--AI Think
+--GridNav:CanFindPath(unitpos, nextwaypoint)
+--nextwaypoint via GetInitalGoalEntity?
+--print the initalgoalentity, probably has every other goal ?
+--
+--go aggressive

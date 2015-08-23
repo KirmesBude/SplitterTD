@@ -1,10 +1,37 @@
 ---------------------------------------------------------------------------
 if SplitterTD == nil then
+  --DebugPrint( '[SPLITTERTD] creating splittertd game mode' )
 	_G.SplitterTD = class({})
 end
 
+-- This library allow for easily delayed/timed actions
+require('libraries/timers')
+-- This library can be used for advancted physics/motion/collision of units.  See PhysicsReadme.txt for more information.
+require('libraries/physics')
+-- This library can be used for advanced 3D projectile systems.
+require('libraries/projectiles')
+-- This library can be used for sending panorama notifications to the UIs of players/teams/everyone
+require('libraries/notifications')
+-- This library can be used for starting customized animations on units from lua
+require('libraries/animations')
+--This library can be used ...
+require('libraries/popups')
+--Utility
 require('internal/util')
-require('splittertd')
+
+
+-- settings.lua is where you can specify many different properties for your game mode and is one of the core splittertd files.
+require('settings')
+-- events.lua is where you can specify the actions to be taken when any event occurs and is one of the core splittertd files.
+require('events')
+
+
+-- These internal libraries set up splittertd's events and processes.  Feel free to inspect them/change them if you need to.
+require('internal/splittertd')
+require('internal/events')
+
+
+--require('splittertd')
 
 require('gamemode')
 require('upgrades')
@@ -12,10 +39,6 @@ require('mechanics')
 require('orders')
 require('builder')
 require('buildinghelper')
-
-require('libraries/timers')
-require('libraries/popups')
-require('libraries/notifications')
 
 function Precache( context )
 	--[[

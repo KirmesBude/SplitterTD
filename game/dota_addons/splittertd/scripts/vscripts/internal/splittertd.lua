@@ -62,7 +62,7 @@ function SplitterTD:_InitSplitterTD()
   ListenToGameEvent('dota_player_gained_level', Dynamic_Wrap(SplitterTD, 'OnPlayerLevelUp'), self)
   ListenToGameEvent('dota_ability_channel_finished', Dynamic_Wrap(SplitterTD, 'OnAbilityChannelFinished'), self)
   ListenToGameEvent('dota_player_learned_ability', Dynamic_Wrap(SplitterTD, 'OnPlayerLearnedAbility'), self)
-  ListenToGameEvent('entity_killed', Dynamic_Wrap(SplitterTD, 'OnEntityKilled'), self)
+  --ListenToGameEvent('entity_killed', Dynamic_Wrap(SplitterTD, 'OnEntityKilled'), self)
   ListenToGameEvent('player_connect_full', Dynamic_Wrap(SplitterTD, 'OnConnectFull'), self)
   ListenToGameEvent('player_disconnect', Dynamic_Wrap(SplitterTD, 'OnDisconnect'), self)
   ListenToGameEvent('dota_item_purchased', Dynamic_Wrap(SplitterTD, 'OnItemPurchased'), self)
@@ -78,7 +78,7 @@ function SplitterTD:_InitSplitterTD()
   ListenToGameEvent('dota_player_used_ability', Dynamic_Wrap(SplitterTD, 'OnAbilityUsed'), self)
   ListenToGameEvent('game_rules_state_change', Dynamic_Wrap(SplitterTD, 'OnGameRulesStateChange'), self)
   ListenToGameEvent('npc_spawned', Dynamic_Wrap(SplitterTD, 'OnNPCSpawned'), self)
-  ListenToGameEvent('dota_player_pick_hero', Dynamic_Wrap(SplitterTD, 'OnPlayerPickHero'), self)
+  --ListenToGameEvent('dota_player_pick_hero', Dynamic_Wrap(SplitterTD, 'OnPlayerPickHero'), self)
   ListenToGameEvent('dota_team_kill_credit', Dynamic_Wrap(SplitterTD, 'OnTeamKillCredit'), self)
   ListenToGameEvent("player_reconnected", Dynamic_Wrap(SplitterTD, 'OnPlayerReconnect'), self)
 
@@ -106,10 +106,10 @@ function SplitterTD:_InitSplitterTD()
     end, "events test", 0)]]
 
   local spew = 0
-  if SPLITTERTD_DEBUG_SPEW then
+  if DEBUG_SPEW then
     spew = 1
   end
-  Convars:RegisterConvar('splittertd_spew', tostring(spew), 'Set to 1 to start spewing splittertd debug info.  Set to 0 to disable.', 0)
+  --Convars:RegisterConvar('splittertd_spew', tostring(spew), 'Set to 1 to start spewing splittertd debug info.  Set to 0 to disable.', 0)
 
   -- Change random seed
   local timeTxt = string.gsub(string.gsub(GetSystemTime(), ':', ''), '0','')

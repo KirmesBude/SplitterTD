@@ -62,7 +62,7 @@ function SplitterTD:_InitSplitterTD()
   ListenToGameEvent('dota_player_gained_level', Dynamic_Wrap(SplitterTD, 'OnPlayerLevelUp'), self)
   ListenToGameEvent('dota_ability_channel_finished', Dynamic_Wrap(SplitterTD, 'OnAbilityChannelFinished'), self)
   ListenToGameEvent('dota_player_learned_ability', Dynamic_Wrap(SplitterTD, 'OnPlayerLearnedAbility'), self)
-  --ListenToGameEvent('entity_killed', Dynamic_Wrap(SplitterTD, 'OnEntityKilled'), self)
+  ListenToGameEvent('entity_killed', Dynamic_Wrap(SplitterTD, 'OnEntityKilled'), self)
   ListenToGameEvent('player_connect_full', Dynamic_Wrap(SplitterTD, 'OnConnectFull'), self)
   ListenToGameEvent('player_disconnect', Dynamic_Wrap(SplitterTD, 'OnDisconnect'), self)
   ListenToGameEvent('dota_item_purchased', Dynamic_Wrap(SplitterTD, 'OnItemPurchased'), self)
@@ -78,7 +78,7 @@ function SplitterTD:_InitSplitterTD()
   ListenToGameEvent('dota_player_used_ability', Dynamic_Wrap(SplitterTD, 'OnAbilityUsed'), self)
   ListenToGameEvent('game_rules_state_change', Dynamic_Wrap(SplitterTD, 'OnGameRulesStateChange'), self)
   ListenToGameEvent('npc_spawned', Dynamic_Wrap(SplitterTD, 'OnNPCSpawned'), self)
-  --ListenToGameEvent('dota_player_pick_hero', Dynamic_Wrap(SplitterTD, 'OnPlayerPickHero'), self)
+  ListenToGameEvent('dota_player_pick_hero', Dynamic_Wrap(SplitterTD, 'OnPlayerPickHero'), self)
   ListenToGameEvent('dota_team_kill_credit', Dynamic_Wrap(SplitterTD, 'OnTeamKillCredit'), self)
   ListenToGameEvent("player_reconnected", Dynamic_Wrap(SplitterTD, 'OnPlayerReconnect'), self)
 
@@ -99,6 +99,18 @@ function SplitterTD:_InitSplitterTD()
   --ListenToGameEvent('dota_combatlog', Dynamic_Wrap(SplitterTD, 'OnCombatLogEvent'), self)
   --ListenToGameEvent('dota_player_killed', Dynamic_Wrap(SplitterTD, 'OnPlayerKilled'), self)
   --ListenToGameEvent('player_team', Dynamic_Wrap(SplitterTD, 'OnPlayerTeam'), self)
+
+  --BH
+
+  -- Filters
+  GameRules:GetGameModeEntity():SetExecuteOrderFilter( Dynamic_Wrap( SplitterTD, "FilterExecuteOrder" ), self )
+
+  -- Register Listener
+  CustomGameEventManager:RegisterListener( "update_selected_entities", Dynamic_Wrap(SplitterTD, 'OnPlayerSelectedEntities'))
+  CustomGameEventManager:RegisterListener( "repair_order", Dynamic_Wrap(SplitterTD, "RepairOrder"))   
+  CustomGameEventManager:RegisterListener( "building_helper_build_command", Dynamic_Wrap(BuildingHelper, "BuildCommand"))
+  CustomGameEventManager:RegisterListener( "building_helper_cancel_command", Dynamic_Wrap(BuildingHelper, "CancelCommand"))
+
 
   --[[This block is only used for testing events handling in the event that Valve adds more in the future
   Convars:RegisterCommand('events_test', function()

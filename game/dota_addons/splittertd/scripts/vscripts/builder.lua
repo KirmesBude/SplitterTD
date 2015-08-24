@@ -32,7 +32,8 @@ function Build( event )
 
 	local hero = caster:GetPlayerOwner():GetAssignedHero()
 	local playerID = hero:GetPlayerID()
-	local player = PlayerResource:GetPlayer(playerID)	
+	local player = PlayerResource:GetPlayer(playerID)
+	local team = PlayerResource:GetTeam(playerID)	
 
 	-- If the ability has an AbilityGoldCost, it's impossible to not have enough gold the first time it's cast
 	-- Always refund the gold here, as the building hasn't been placed yet
@@ -69,6 +70,14 @@ function Build( event )
 			return false
 		end
 
+		--TODO
+		--Intercept here to let the teams only build in their own areas
+		if 	team==DOTA_TEAM_GOODGUYS and vPos.y>0
+		 or	team==DOTA_TEAM_BADGUYS and vPos.y<0   then
+			SendErrorMessage(caster:GetPlayerOwnerID(), "#error_invalid_build_position_enemy")
+			return false
+		end
+		
 		return true
     end)
 
@@ -88,10 +97,20 @@ function Build( event )
 	end)
 
     -- The construction failed and was never confirmed due to the gridnav being blocked in the attempted area
-	event:OnConstructionFailed(function()
+	event:OnConstructionFailed(function(bBlocksPath)
 		local name = player.activeBuilding
 		DebugPrint("[BH] Failed placement of " .. name)
-		SendErrorMessage(caster:GetPlayerOwnerID(), "#error_invalid_build_position")
+
+		-- Refund resources for this failed work
+		hero:ModifyGold(gold_cost, false, 0)
+    	ModifyLumber( player, lumber_cost)
+
+    	if bBlocksPath then
+    		SendErrorMessage(caster:GetPlayerOwnerID(), "#error_blocks_path")
+    	else
+			SendErrorMessage(caster:GetPlayerOwnerID(), "#error_invalid_build_position")
+		end
+
 	end)
 
 	-- Cancelled due to ClearQueue

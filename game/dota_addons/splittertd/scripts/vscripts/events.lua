@@ -222,6 +222,7 @@ function SplitterTD:OnEntityKilled( keys )
   DebugPrintTable( keys )
 
   SplitterTD:_OnEntityKilled( keys )
+  SplitterTD:_BH_OnEntityKilled( keys )
   
 
   -- The Unit that was Killed
@@ -244,8 +245,6 @@ function SplitterTD:OnEntityKilled( keys )
 
   -- Put code here to handle when an entity gets killed
 end
-
-
 
 -- This function is called 1 to 2 times as the player connects initially but before they 
 -- have completely connected
@@ -331,4 +330,162 @@ function SplitterTD:OnNPCGoalReached(keys)
   local goalEntity = EntIndexToHScript(keys.goal_entindex)
   local nextGoalEntity = EntIndexToHScript(keys.next_goal_entindex)
   local npc = EntIndexToHScript(keys.npc_entindex)
+end
+
+--[[
+  This function is called once and only once as soon as the first player (almost certain to be the server in local lobbies) loads in.
+  It can be used to initialize state that isn't initializeable in InitSplitterTD() but needs to be done before everyone loads in.
+]]
+function SplitterTD:OnFirstPlayerLoaded()
+  DebugPrint("[SPLITTERTD] First Player has loaded")
+end
+
+--[[
+  This function is called once and only once after all players have loaded into the game, right as the hero selection time begins.
+  It can be used to initialize non-hero player state or adjust the hero selection (i.e. force random etc)
+]]
+function SplitterTD:OnAllPlayersLoaded()
+  DebugPrint("[SPLITTERTD] All Players have loaded into the game")
+end
+
+-- A player picked a hero
+function SplitterTD:OnPlayerPickHero(keys)
+
+  local hero = EntIndexToHScript(keys.heroindex)
+  local player = EntIndexToHScript(keys.player)
+  local playerID = hero:GetPlayerID()
+
+  -- Initialize Variables for Tracking
+  player.units = {} -- This keeps the handle of all the units of the player, to iterate for unlocking upgrades
+  player.structures = {} -- This keeps the handle of the constructed units, to iterate for unlocking upgrades
+  player.buildings = {} -- This keeps the name and quantity of each building
+  player.upgrades = {} -- This kees the name of all the upgrades researched
+  player.lumber = 0 -- Secondary resource of the player
+
+    -- Create city center in front of the hero
+    local position = hero:GetAbsOrigin() + hero:GetForwardVector() * 300
+    local city_center_name = "city_center"
+  local building = BuildingHelper:PlaceBuilding(player, city_center_name, position, true, 5) 
+
+  -- Set health to test repair
+  building:SetHealth(building:GetMaxHealth()/3)
+
+  -- These are required for repair to know how many resources the building takes
+  building.GoldCost = 100
+  building.LumberCost = 100
+  building.BuildTime = 15
+
+  -- Add the building to the player structures list
+  player.buildings[city_center_name] = 1
+  table.insert(player.structures, building)
+
+  CheckAbilityRequirements( hero, player )
+  CheckAbilityRequirements( building, player )
+
+  -- Add the hero to the player units list
+  table.insert(player.units, hero)
+  hero.state = "idle" --Builder state
+
+  -- Spawn some peasants around the hero
+  local position = hero:GetAbsOrigin()
+  local numBuilders = 5
+  local angle = 360/numBuilders
+  for i=1,5 do
+    local rotate_pos = position + Vector(1,0,0) * 100
+    local builder_pos = RotatePosition(position, QAngle(0, angle*i, 0), rotate_pos)
+
+    local builder = CreateUnitByName("peasant", builder_pos, true, hero, hero, hero:GetTeamNumber())
+    builder:SetOwner(hero)
+    builder:SetControllableByPlayer(playerID, true)
+    table.insert(player.units, builder)
+    builder.state = "idle"
+
+    -- Go through the abilities and upgrade
+    CheckAbilityRequirements( builder, player )
+  end
+
+  -- Give Initial Resources
+  hero:SetGold(5000, false)
+  ModifyLumber(player, 5000)
+
+  -- Lumber tick
+  Timers:CreateTimer(1, function()
+    ModifyLumber(player, 10)
+    return 10
+  end)
+
+  -- Give a building ability
+  local item = CreateItem("item_build_wall", hero, hero)
+  hero:AddItem(item)
+
+  -- Learn all abilities (this isn't necessary on creatures)
+  for i=0,15 do
+    local ability = hero:GetAbilityByIndex(i)
+    if ability then ability:SetLevel(ability:GetMaxLevel()) end
+  end
+  hero:SetAbilityPoints(0)
+
+end
+
+--[[
+  This function is called once and only once for every player when they spawn into the game for the first time.  It is also called
+  if the player's hero is replaced with a new hero for any reason.  This function is useful for initializing heroes, such as adding
+  levels, changing the starting gold, removing/adding abilities, adding physics, etc.
+
+  The hero parameter is the hero entity that just spawned in
+]]
+function SplitterTD:OnHeroInGame(hero)
+  DebugPrint("[SPLITTERTD] Hero spawned in game for first time -- " .. hero:GetUnitName())
+
+  -- This line for example will set the starting gold of every hero to 500 unreliable gold
+  --hero:SetGold(500, false)
+
+  -- These lines will create an item and add it to the player, effectively ensuring they start with the item
+  --local item = CreateItem("item_example_item", hero, hero)
+  --hero:AddItem(item)
+
+  --[[ --These lines if uncommented will replace the W ability of any hero that loads into the game
+    --with the "example_ability" ability
+
+  local abil = hero:GetAbilityByIndex(1)
+  hero:RemoveAbility(abil:GetAbilityName())
+  hero:AddAbility("example_ability")]]
+end
+
+--[[
+  This function is called once and only once when the game completely begins (about 0:00 on the clock).  At this point,
+  gold will begin to go up in ticks if configured, creeps will spawn, towers will become damageable etc.  This function
+  is useful for starting any game logic timers/thinkers, beginning the first round, etc.
+]]
+function SplitterTD:OnGameInProgress()
+  DebugPrint("[SPLITTERTD] The game has officially begun")
+
+  SpawnWave()
+  
+  Timers:CreateTimer(30, -- Start this timer 30 game-time seconds later
+    function()
+      DebugPrint("This function is called 30 seconds after the game begins, and every 30 seconds thereafter")
+      return 30.0 -- Rerun this timer every 30 game-time seconds 
+    end)
+end
+
+function SpawnWave()
+  local name = 'wave1'
+  local spawner = Entities:FindByName(nil, 'splitter_spawner_goodguys')
+  local vec = spawner:GetOrigin()
+  local unit = CreateUnitByName(name, vec, true, nil, nil, DOTA_TEAM_NEUTRALS)
+end
+
+-- Called whenever a player changes its current selection, it keeps a list of entity indexes
+function SplitterTD:OnPlayerSelectedEntities( event )
+  local pID = event.pID
+
+  GameRules.SELECTED_UNITS[pID] = event.selected_entities
+
+  -- This is for Building Helper to know which is the currently active builder
+  local mainSelected = GetMainSelectedEntity(pID)
+  if IsValidEntity(mainSelected) and IsBuilder(mainSelected) then
+    local player = PlayerResource:GetPlayer(pID)
+    player.activeBuilder = mainSelected
+  end
 end

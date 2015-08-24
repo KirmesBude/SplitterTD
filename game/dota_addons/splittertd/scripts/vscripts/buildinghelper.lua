@@ -386,11 +386,36 @@ function BuildingHelper:StartBuilding( keys )
 
     DebugPrint("[BH] Initializing Building Entity: "..unitName.." at "..VectorString(location))
 
-    -- Mark this work in progress, skip refund if cancelled as the building is already placed
-    work.inProgress = true
-
     -- Spawn point obstructions before placing the building
     local gridNavBlockers = BuildingHelper:BlockGridNavSquare(size, location)
+
+    --Does it block the path?
+    local goodguys_loc = Entities:FindByName(nil, 'splitter_spawner_goodguys'):GetAbsOrigin()
+    local badguys_loc = Entities:FindByName(nil, 'splitter_spawner_goodguys_wp_end'):GetAbsOrigin()
+
+    local bPath = GridNav:CanFindPath(goodguys_loc, badguys_loc)
+
+    if not bPath then
+    
+        --remove gridNavBlockers
+        for _, v in pairs(gridNavBlockers) do
+            DoEntFireByInstanceHandle(v, "Disable", "1", 0, nil, nil)
+            DoEntFireByInstanceHandle(v, "Kill", "1", 1, nil, nil)
+        end
+
+        -- Remove the model particle and Advance Queue
+        BuildingHelper:AdvanceQueue(builder)
+        ParticleManager:DestroyParticle(work.particleIndex, true)
+
+        --Throw Error
+        DebugPrint("[BH] Error: Blocking Unit Path is not allowed!")
+        callbacks.onConstructionFailed(true)
+
+        return
+    end 
+
+    -- Mark this work in progress, skip refund if cancelled as the building is already placed
+    work.inProgress = true
 
     -- Spawn the building
     local building = CreateUnitByName(unitName, OutOfWorldVector, false, playersHero, player, builder:GetTeam())
@@ -754,9 +779,11 @@ function BuildingHelper:CancelBuilding(keys)
     DebugPrint("[BH] CancelBuilding "..building:GetUnitName().." "..building:GetEntityIndex())
 
     -- Refund
-    local refund_factor = 0.75
+    local refund_factor = 1
     local gold_cost = math.floor(GetGoldCost(building) * refund_factor)
     local lumber_cost = math.floor(GetLumberCost(building) * refund_factor)
+
+    DebugPrint(gold_cost)
 
     hero:ModifyGold(gold_cost, true, 0)
     ModifyLumber( hero:GetPlayerOwner(), lumber_cost)
@@ -874,12 +901,13 @@ function BuildingHelper:ValidPosition(size, location, callbacks)
             local testLocation = Vector(x, y, location.z)
             if GridNav:IsBlocked(testLocation) or GridNav:IsTraversable(testLocation) == false then
                 if callbacks.onConstructionFailed then
-                    callbacks.onConstructionFailed()
+                    callbacks.onConstructionFailed(false)
                     return false
                 end
             end
         end
     end
+
     return true
 end
 

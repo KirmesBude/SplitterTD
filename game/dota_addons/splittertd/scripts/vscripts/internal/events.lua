@@ -76,3 +76,70 @@ end
 function SplitterTD:_OnConnectFull(keys)
   SplitterTD:_CaptureSplitterTD()
 end
+
+--BH
+-- An entity died
+function SplitterTD:_BH_OnEntityKilled( event )
+
+  -- The Unit that was Killed
+  local killedUnit = EntIndexToHScript(event.entindex_killed)
+  -- The Killing entity
+  local killerEntity
+  if event.entindex_attacker then
+    killerEntity = EntIndexToHScript(event.entindex_attacker)
+  end
+
+  -- Player owner of the unit
+  local player = killedUnit:GetPlayerOwner()
+
+  -- Building Killed
+  if IsCustomBuilding(killedUnit) then
+
+     -- Building Helper grid cleanup
+    BuildingHelper:RemoveBuilding(killedUnit, true)
+
+    -- Check units for downgrades
+    local building_name = killedUnit:GetUnitName()
+        
+    -- Substract 1 to the player building tracking table for that name
+    if player.buildings[building_name] then
+      player.buildings[building_name] = player.buildings[building_name] - 1
+    end
+
+    -- possible unit downgrades
+    for k,units in pairs(player.units) do
+        CheckAbilityRequirements( units, player )
+    end
+
+    -- possible structure downgrades
+    for k,structure in pairs(player.structures) do
+      CheckAbilityRequirements( structure, player )
+    end
+  end
+
+  -- Cancel queue of a builder when killed
+  if IsBuilder(killedUnit) then
+    BuildingHelper:ClearQueue(killedUnit)
+  end
+
+  -- Table cleanup
+  if player then
+    -- Remake the tables
+    local table_structures = {}
+    for _,building in pairs(player.structures) do
+      if building and IsValidEntity(building) and building:IsAlive() then
+        --print("Valid building: "..building:GetUnitName())
+        table.insert(table_structures, building)
+      end
+    end
+    player.structures = table_structures
+    
+    local table_units = {}
+    for _,unit in pairs(player.units) do
+      if unit and IsValidEntity(unit) then
+        table.insert(table_units, unit)
+      end
+    end
+    player.units = table_units    
+  end
+end

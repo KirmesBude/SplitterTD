@@ -1,8 +1,4 @@
 ---------------------------------------------------------------------------
-if SplitterTD == nil then
-  --DebugPrint( '[SPLITTERTD] creating splittertd game mode' )
-	_G.SplitterTD = class({})
-end
 
 -- This library allow for easily delayed/timed actions
 require('libraries/timers')
@@ -19,6 +15,10 @@ require('libraries/popups')
 --Utility
 require('internal/util')
 
+if SplitterTD == nil then
+  	DebugPrint( '[SPLITTERTD] creating splittertd game mode' )
+	_G.SplitterTD = class({})
+end
 
 -- settings.lua is where you can specify many different properties for your game mode and is one of the core splittertd files.
 require('settings')

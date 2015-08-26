@@ -385,7 +385,7 @@ function BuildingHelper:StartBuilding( keys )
 		-- Building canceled, refund resources
 		work.refund = true
 
-		if work.callbacks.onConstructionCancelled ~= nil then
+		if work.callbacks.onConstructionCancelled then
 			work.callbacks.onConstructionCancelled(work)
 		end
 
@@ -888,9 +888,6 @@ end
 ]]--
 function BuildingHelper:ValidPosition(size, location, callbacks)
 
-	local bBlocksPath = nil
-	local bValid = true
-
     local halfSide = (size/2)*64
     local boundingRect = {  leftBorderX = location.x-halfSide, 
                             rightBorderX = location.x+halfSide, 
@@ -902,41 +899,16 @@ function BuildingHelper:ValidPosition(size, location, callbacks)
             local testLocation = Vector(x, y, location.z)
             if GridNav:IsBlocked(testLocation) or GridNav:IsTraversable(testLocation) == false then
 
-                bValid = false
+                if callbacks.onConstructionFailed then
+                    callbacks.onConstructionFailed(false)
+                end
 
-            else
-
-    			local goodguys_loc = Entities:FindByName(nil, 'splitter_spawner_goodguys'):GetAbsOrigin()
-				local badguys_loc = Entities:FindByName(nil, 'splitter_spawner_badguys'):GetAbsOrigin()
-
-				-- Spawn point obstructions before placing the building
-				local gridNavBlockers = BuildingHelper:BlockGridNavSquare(size, location)
-
-				--Path still free?
-				bBlocksPath = not GridNav:CanFindPath(goodguys_loc, badguys_loc)
-
-				if bBlocksPath then
-
-					--remove gridNavBlockers
-					for _, v in pairs(gridNavBlockers) do
-						DoEntFireByInstanceHandle(v, "Disable", "1", 0, nil, nil)
-						DoEntFireByInstanceHandle(v, "Kill", "1", 1, nil, nil)
-					end
-
-					--Throw Error
-					DebugPrint("[BH] Error: Blocking Unit Path is not allowed!")
-
-					bValid = false
-				end 
-
+                return false
             end
         end
     end
 
-    if not bValid and callbacks.onConstructionFailed ~= nil then
-		callbacks.onConstructionFailed(bBlocksPath)
-		return false
-	end
+    BuidlingHelper_SplitterTD:ValidPosition(size, location, callback)
 
     return true
 end

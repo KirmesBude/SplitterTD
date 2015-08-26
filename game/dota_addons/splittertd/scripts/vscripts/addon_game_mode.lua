@@ -31,14 +31,20 @@ require('internal/splittertd')
 require('internal/events')
 
 
---require('splittertd')
-
 require('gamemode')
-require('upgrades')
-require('mechanics')
-require('orders')
-require('builder')
-require('buildinghelper')
+
+
+--Buildinghelper library
+require('buildinghelper/internal/upgrades')
+require('buildinghelper/internal/mechanics')
+require('buildinghelper/internal/orders')
+require('buildinghelper/internal/builder')
+require('buildinghelper/internal/buildinghelper')
+
+--Buildinghelper splittertd extension
+require('buildinghelper/buildinghelper_splittertd')
+require('buildinghelper/builder_splittertd')
+
 
 function Precache( context )
 	--[[

@@ -777,11 +777,9 @@ function BuildingHelper:CancelBuilding(keys)
     DebugPrint("[BH] CancelBuilding "..building:GetUnitName().." "..building:GetEntityIndex())
 
     -- Refund
-    local refund_factor = 1
+    local refund_factor = 0.75
     local gold_cost = math.floor(GetGoldCost(building) * refund_factor)
     local lumber_cost = math.floor(GetLumberCost(building) * refund_factor)
-
-    DebugPrint(gold_cost)
 
     hero:ModifyGold(gold_cost, true, 0)
     ModifyLumber( hero:GetPlayerOwner(), lumber_cost)

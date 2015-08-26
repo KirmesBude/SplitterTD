@@ -97,15 +97,9 @@ function Build( event )
 	end)
 
     -- The construction failed and was never confirmed due to the gridnav being blocked in the attempted area
-	event:OnConstructionFailed(function(work, bBlocksPath)
+	event:OnConstructionFailed(function(bBlocksPath)
 		local name = player.activeBuilding
 		DebugPrint("[BH] Failed placement of " .. name)
-
-		-- Refund resources for this failed work
-		if work and work.refund then
-			hero:ModifyGold(gold_cost, false, 0)
-			ModifyLumber( player, lumber_cost)
-		end
 
 		if bBlocksPath then
 			SendErrorMessage(caster:GetPlayerOwnerID(), "#error_blocks_path")

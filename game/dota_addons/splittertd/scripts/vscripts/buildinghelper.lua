@@ -376,11 +376,19 @@ function BuildingHelper:StartBuilding( keys )
     local size = buildingTable:GetVal("BuildingSize", "number")
 
     -- Check gridnav and cancel if invalid
-    if not BuildingHelper:ValidPosition(work, size, location, callbacks) then
+    if not BuildingHelper:ValidPosition(size, location, callbacks) then
         
         -- Remove the model particle and Advance Queue
         BuildingHelper:AdvanceQueue(builder)
         ParticleManager:DestroyParticle(work.particleIndex, true)
+
+		-- Building canceled, refund resources
+		work.refund = true
+
+		if work.callbacks.onConstructionCancelled ~= nil then
+			work.callbacks.onConstructionCancelled(work)
+		end
+
         return
     end
 
@@ -388,6 +396,24 @@ function BuildingHelper:StartBuilding( keys )
 
     -- Mark this work in progress, skip refund if cancelled as the building is already placed
     work.inProgress = true
+
+	-- Keep the origin of the buildings to put them back in position after spawning point_simple_obstruction entities
+	local buildings = FindUnitsInRadius(DOTA_TEAM_NEUTRALS, location, nil, 1000, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_INVULNERABLE + DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_ANY_ORDER, false)
+	for k,v in pairs(buildings) do
+		if IsCustomBuilding(v) then
+			v.Origin = v:GetAbsOrigin()
+		end
+	end
+
+	-- Spawn point obstructions before placing the building
+	local gridNavBlockers = BuildingHelper:BlockGridNavSquare(size, location)
+
+	-- Stuck the buildings back in place
+	for k,v in pairs(buildings) do
+		if IsCustomBuilding(v) then
+			v:SetAbsOrigin(v.Origin)
+		end
+	end
 
     -- Spawn the building
     local building = CreateUnitByName(unitName, OutOfWorldVector, false, playersHero, player, builder:GetTeam())
@@ -860,10 +886,10 @@ end
       * Checks GridNav square of certain size at a location
       * Sends onConstructionFailed if invalid
 ]]--
-function BuildingHelper:ValidPosition(work, size, location, callbacks)
+function BuildingHelper:ValidPosition(size, location, callbacks)
 
 	local bBlocksPath = nil
-	local valid = true
+	local bValid = true
 
     local halfSide = (size/2)*64
     local boundingRect = {  leftBorderX = location.x-halfSide, 
@@ -876,7 +902,7 @@ function BuildingHelper:ValidPosition(work, size, location, callbacks)
             local testLocation = Vector(x, y, location.z)
             if GridNav:IsBlocked(testLocation) or GridNav:IsTraversable(testLocation) == false then
 
-                valid = false
+                bValid = false
 
             else
 
@@ -900,19 +926,15 @@ function BuildingHelper:ValidPosition(work, size, location, callbacks)
 					--Throw Error
 					DebugPrint("[BH] Error: Blocking Unit Path is not allowed!")
 
-					if work then
-						work.refund = true
-					end
-
-					valid = false
+					bValid = false
 				end 
 
             end
         end
     end
 
-    if not valid and callbacks.onConstructionFailed then
-		callbacks.onConstructionFailed(work, bBlocksPath)
+    if not bValid and callbacks.onConstructionFailed ~= nil then
+		callbacks.onConstructionFailed(bBlocksPath)
 		return false
 	end
 
@@ -932,12 +954,11 @@ function BuildingHelper:AddToQueue( builder, location, bQueued )
     local fMaxScale = buildingTable:GetVal("MaxScale", "float")
     local size = buildingTable:GetVal("BuildingSize", "number")
     local callbacks = player.activeCallbacks
-    local work = builder.work
 
     SnapToGrid(size, location)
 
     -- Check gridnav
-    if not BuildingHelper:ValidPosition(work, size, location, callbacks) then
+    if not BuildingHelper:ValidPosition(size, location, callbacks) then
         return
     end
 

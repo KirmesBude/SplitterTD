@@ -376,7 +376,7 @@ function BuildingHelper:StartBuilding( keys )
     local size = buildingTable:GetVal("BuildingSize", "number")
 
     -- Check gridnav and cancel if invalid
-    if not BuildingHelper:ValidPosition(size, location, callbacks) then
+    if not BuildingHelper:ValidPosition(work, size, location, callbacks) then
         
         -- Remove the model particle and Advance Queue
         BuildingHelper:AdvanceQueue(builder)
@@ -385,34 +385,6 @@ function BuildingHelper:StartBuilding( keys )
     end
 
     DebugPrint("[BH] Initializing Building Entity: "..unitName.." at "..VectorString(location))
-
-    -- Spawn point obstructions before placing the building
-    local gridNavBlockers = BuildingHelper:BlockGridNavSquare(size, location)
-
-    --Does it block the path?
-    local goodguys_loc = Entities:FindByName(nil, 'splitter_spawner_goodguys'):GetAbsOrigin()
-    local badguys_loc = Entities:FindByName(nil, 'splitter_spawner_goodguys_wp_end'):GetAbsOrigin()
-
-    local bPath = GridNav:CanFindPath(goodguys_loc, badguys_loc)
-
-    if not bPath then
-    
-        --remove gridNavBlockers
-        for _, v in pairs(gridNavBlockers) do
-            DoEntFireByInstanceHandle(v, "Disable", "1", 0, nil, nil)
-            DoEntFireByInstanceHandle(v, "Kill", "1", 1, nil, nil)
-        end
-
-        -- Remove the model particle and Advance Queue
-        BuildingHelper:AdvanceQueue(builder)
-        ParticleManager:DestroyParticle(work.particleIndex, true)
-
-        --Throw Error
-        DebugPrint("[BH] Error: Blocking Unit Path is not allowed!")
-        callbacks.onConstructionFailed(true)
-
-        return
-    end 
 
     -- Mark this work in progress, skip refund if cancelled as the building is already placed
     work.inProgress = true
@@ -888,7 +860,10 @@ end
       * Checks GridNav square of certain size at a location
       * Sends onConstructionFailed if invalid
 ]]--
-function BuildingHelper:ValidPosition(size, location, callbacks)
+function BuildingHelper:ValidPosition(work, size, location, callbacks)
+
+	local bBlocksPath = nil
+	local valid = true
 
     local halfSide = (size/2)*64
     local boundingRect = {  leftBorderX = location.x-halfSide, 
@@ -900,13 +875,46 @@ function BuildingHelper:ValidPosition(size, location, callbacks)
         for y=boundingRect.topBorderY-32,boundingRect.bottomBorderY+32,-64 do
             local testLocation = Vector(x, y, location.z)
             if GridNav:IsBlocked(testLocation) or GridNav:IsTraversable(testLocation) == false then
-                if callbacks.onConstructionFailed then
-                    callbacks.onConstructionFailed(false)
-                    return false
-                end
+
+                valid = false
+
+            else
+
+    			local goodguys_loc = Entities:FindByName(nil, 'splitter_spawner_goodguys'):GetAbsOrigin()
+				local badguys_loc = Entities:FindByName(nil, 'splitter_spawner_badguys'):GetAbsOrigin()
+
+				-- Spawn point obstructions before placing the building
+				local gridNavBlockers = BuildingHelper:BlockGridNavSquare(size, location)
+
+				--Path still free?
+				bBlocksPath = not GridNav:CanFindPath(goodguys_loc, badguys_loc)
+
+				if bBlocksPath then
+
+					--remove gridNavBlockers
+					for _, v in pairs(gridNavBlockers) do
+						DoEntFireByInstanceHandle(v, "Disable", "1", 0, nil, nil)
+						DoEntFireByInstanceHandle(v, "Kill", "1", 1, nil, nil)
+					end
+
+					--Throw Error
+					DebugPrint("[BH] Error: Blocking Unit Path is not allowed!")
+
+					if work then
+						work.refund = true
+					end
+
+					valid = false
+				end 
+
             end
         end
     end
+
+    if not valid and callbacks.onConstructionFailed then
+		callbacks.onConstructionFailed(work, bBlocksPath)
+		return false
+	end
 
     return true
 end
@@ -924,11 +932,12 @@ function BuildingHelper:AddToQueue( builder, location, bQueued )
     local fMaxScale = buildingTable:GetVal("MaxScale", "float")
     local size = buildingTable:GetVal("BuildingSize", "number")
     local callbacks = player.activeCallbacks
+    local work = builder.work
 
     SnapToGrid(size, location)
 
     -- Check gridnav
-    if not BuildingHelper:ValidPosition(size, location, callbacks) then
+    if not BuildingHelper:ValidPosition(work, size, location, callbacks) then
         return
     end
 

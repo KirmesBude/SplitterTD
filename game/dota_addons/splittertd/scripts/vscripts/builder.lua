@@ -59,9 +59,9 @@ function Build( event )
        		end
        	end
 
-       	-- If not enough resources to queue, stop
-       	if not PlayerHasEnoughGold( player, lumber_cost ) then
-       		SendErrorMessage(caster:GetPlayerOwnerID(), "#error_not_enough_gold")
+		-- If not enough resources to queue, stop
+		if not PlayerHasEnoughGold( player, lumber_cost ) then
+			SendErrorMessage(caster:GetPlayerOwnerID(), "#error_not_enough_gold")
 			return false
 		end
 
@@ -70,14 +70,14 @@ function Build( event )
 			return false
 		end
 
-		--TODO
 		--Intercept here to let the teams only build in their own areas
 		if 	team==DOTA_TEAM_GOODGUYS and vPos.y>0
-		 or	team==DOTA_TEAM_BADGUYS and vPos.y<0   then
-			SendErrorMessage(caster:GetPlayerOwnerID(), "#error_invalid_build_position_enemy")
+			or	team==DOTA_TEAM_BADGUYS and vPos.y<0   then
+
+			SendErrorMessage(caster:GetPlayerOwnerID(), "#error_must_build_on_allied_ground")
 			return false
 		end
-		
+
 		return true
     end)
 
@@ -97,17 +97,19 @@ function Build( event )
 	end)
 
     -- The construction failed and was never confirmed due to the gridnav being blocked in the attempted area
-	event:OnConstructionFailed(function(bBlocksPath)
+	event:OnConstructionFailed(function(work, bBlocksPath)
 		local name = player.activeBuilding
 		DebugPrint("[BH] Failed placement of " .. name)
 
 		-- Refund resources for this failed work
-		hero:ModifyGold(gold_cost, false, 0)
-    	ModifyLumber( player, lumber_cost)
+		if work and work.refund then
+			hero:ModifyGold(gold_cost, false, 0)
+			ModifyLumber( player, lumber_cost)
+		end
 
-    	if bBlocksPath then
-    		SendErrorMessage(caster:GetPlayerOwnerID(), "#error_blocks_path")
-    	else
+		if bBlocksPath then
+			SendErrorMessage(caster:GetPlayerOwnerID(), "#error_blocks_path")
+		else
 			SendErrorMessage(caster:GetPlayerOwnerID(), "#error_invalid_build_position")
 		end
 

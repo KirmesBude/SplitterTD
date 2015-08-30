@@ -415,6 +415,22 @@ function BuildingHelper:StartBuilding( keys )
 		end
 	end
 
+    if not BuildingHelper_SplitterTD:ValidPosition(size, location, callbacks, gridNavBlockers) then
+                
+        -- Remove the model particle and Advance Queue
+        BuildingHelper:AdvanceQueue(builder)
+        ParticleManager:DestroyParticle(work.particleIndex, true)
+
+        -- Building canceled, refund resources
+        work.refund = true
+
+        if work.callbacks.onConstructionCancelled then
+            work.callbacks.onConstructionCancelled(work)
+        end
+
+        return
+    end
+
     -- Spawn the building
     local building = CreateUnitByName(unitName, OutOfWorldVector, false, playersHero, player, builder:GetTeam())
     building:SetControllableByPlayer(pID, true)
@@ -906,7 +922,9 @@ function BuildingHelper:ValidPosition(size, location, callbacks)
         end
     end
 
-    BuidlingHelper_SplitterTD:ValidPosition(size, location, callback)
+    --if not BuildingHelper_SplitterTD:ValidPosition(size, location, callback) then
+        --return false
+    --end
 
     return true
 end

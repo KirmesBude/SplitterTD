@@ -70,7 +70,9 @@ function Build( event )
 		end
 
 		--Intercept here to let the teams only build in their own areas
-		Builder_SplitterTD:ValidPosition_Allied_Ground(caster)
+		if not Builder_SplitterTD:ValidPosition_Allied_Ground(caster, vPos) then
+			return false
+		end
 
 		return true
     end)

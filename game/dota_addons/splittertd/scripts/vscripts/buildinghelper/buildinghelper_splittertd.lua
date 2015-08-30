@@ -2,12 +2,9 @@ if not BuildingHelper_SplitterTD then
 	BuildingHelper_SplitterTD = class({})
 end
 
-function BuildingHelper_SplitterTD:ValidPosition(size, location, callback)
+function BuildingHelper_SplitterTD:ValidPosition(size, location, callbacks, gridNavBlockers)
 	local goodguys_loc = Entities:FindByName(nil, 'splitter_spawner_goodguys'):GetAbsOrigin()
 	local badguys_loc = Entities:FindByName(nil, 'splitter_spawner_badguys'):GetAbsOrigin()
-
-	-- Spawn point obstructions before placing the building
-	local gridNavBlockers = BuildingHelper:BlockGridNavSquare(size, location)
 
 	--Path still free?
 	local bBlocksPath = not GridNav:CanFindPath(goodguys_loc, badguys_loc)
@@ -15,11 +12,11 @@ function BuildingHelper_SplitterTD:ValidPosition(size, location, callback)
 	if bBlocksPath then
 
 		--remove gridNavBlockers
-		for _, v in pairs(gridNavBlockers) do
+		for k, v in pairs(gridNavBlockers) do
 			DoEntFireByInstanceHandle(v, "Disable", "1", 0, nil, nil)
 			DoEntFireByInstanceHandle(v, "Kill", "1", 1, nil, nil)
 		end
-
+		
 		--Throw Error
 		DebugPrint("[BH] Error: Blocking Unit Path is not allowed!")
 

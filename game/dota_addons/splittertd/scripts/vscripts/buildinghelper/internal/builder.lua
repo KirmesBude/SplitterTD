@@ -163,7 +163,6 @@ function Build( event )
 		unit:SetAttackCapability(unit.original_attack)
 		
 		-- Let the building attack and cast abilities
-		Builder_SplitterTD:OnConstructionCompleted_ReEnableAttackCapability(unit)
 		unit:RemoveModifierByName("modifier_construction")
 
 		-- Remove item_building_cancel

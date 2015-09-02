@@ -33,11 +33,11 @@ function SplitterTD_Spawner:SpawnWave()
 		local unit_badguys = CreateUnitByName(name, loc_spawner_badguys, true, nil, nil, DOTA_TEAM_NEUTRALS)
 		SplitterTD_Spawner:InitLogic(unit_badguys, loc_spawner_badguys)
 
-		SPLITTERTD_SPAWNER_CURRENT = SPLITTERTD_SPAWNER_CURRENT + 1
+		--SPLITTERTD_SPAWNER_CURRENT = SPLITTERTD_SPAWNER_CURRENT + 1
 		return SPLITTERTD_SPAWNER_CURRENT
 	end
 
-	DebugPrint('[SPLITTERTD] Failed to spawn wave ' .. SPLITTERTD_SPAWNER_CURRENT+1)
+	--DebugPrint('[SPLITTERTD] Failed to spawn wave ' .. SPLITTERTD_SPAWNER_CURRENT+1)
 	return 0
 end
 

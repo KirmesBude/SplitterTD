@@ -128,7 +128,9 @@ function Build( event )
 	    unit.LumberCost = lumber_cost
 	    unit.BuildTime = build_time
 
-	    Builder_SplitterTD:OnConstructionStarted_DisableAttackCapability(unit)
+	    -- Units can't attack while building
+	    unit.original_attack = unit:GetAttackCapability()
+	    unit:SetAttackCapability(DOTA_UNIT_CAP_NO_ATTACK)
 
 		-- Give item to cancel
 		local item = CreateItem("item_building_cancel", playersHero, playersHero)
@@ -157,6 +159,9 @@ function Build( event )
 		
 		-- Play construction complete sound
 
+		-- Give the unit their original attack capabilities
+		unit:SetAttackCapability(unit.original_attack)
+		
 		-- Let the building attack and cast abilities
 		Builder_SplitterTD:OnConstructionCompleted_ReEnableAttackCapability(unit)
 		unit:RemoveModifierByName("modifier_construction")

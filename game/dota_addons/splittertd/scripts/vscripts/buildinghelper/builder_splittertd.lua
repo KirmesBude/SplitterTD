@@ -16,14 +16,3 @@ function Builder_SplitterTD:ValidPosition_Allied_Ground(caster, vPos)
 
 	return true
 end
-
-function Builder_SplitterTD:OnConstructionStarted_DisableAttackCapability(unit)
-	unit.UNIT_CAP_ATTACK = unit:GetAttackCapability()
-
-	unit:SetAttackCapability(DOTA_UNIT_CAP_NO_ATTACK)
-end
-
-function Builder_SplitterTD:OnConstructionCompleted_ReEnableAttackCapability(unit)
-	
-	unit:SetAttackCapability(unit.UNIT_CAP_ATTACK)
-end

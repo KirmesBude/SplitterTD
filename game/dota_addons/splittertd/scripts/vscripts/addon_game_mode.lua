@@ -32,6 +32,7 @@ require('internal/events')
 
 
 require('gamemode')
+require('splittertd_spawner')
 
 
 --Buildinghelper library
@@ -105,6 +106,7 @@ end
 -- Create our game mode and initialize it
 function Activate()
 	SplitterTD:InitGameMode()
+  SplitterTD_Spawner:Init()
 end
 
 ---------------------------------------------------------------------------

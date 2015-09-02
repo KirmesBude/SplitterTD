@@ -1,3 +1,5 @@
+require('buildings/upgrades_splittertd')
+
 --[[
 	Replaces the building to the upgraded unit name
 ]]--
@@ -67,6 +69,9 @@ function StartUpgrade( event )
 	local modifier_name = event.ModifierName
 	local abilities = {}
 
+	--extended SplitterTD
+	StartUpgrade_DisableAttackCapability(caster)
+
 	-- Check to not disable when the queue was full
 	if #caster.queue < 5 then
 
@@ -111,6 +116,9 @@ function CancelUpgrade( event )
 	local caster = event.caster
 	local abilities = caster.disabled_abilities
 
+	--Extended SplitterTD
+	CancelUpgrade_ReEnableAttackCapability(caster)
+	
 	for k,ability in pairs(abilities) do
 		ability:SetHidden(false)		
 	end

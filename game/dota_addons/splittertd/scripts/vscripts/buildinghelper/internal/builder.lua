@@ -128,6 +128,8 @@ function Build( event )
 	    unit.LumberCost = lumber_cost
 	    unit.BuildTime = build_time
 
+	    Builder_SplitterTD:OnConstructionStarted_DisableAttackCapability(unit)
+
 		-- Give item to cancel
 		local item = CreateItem("item_building_cancel", playersHero, playersHero)
 		unit:AddItem(item)
@@ -155,7 +157,8 @@ function Build( event )
 		
 		-- Play construction complete sound
 
-		-- Let the building cast abilities
+		-- Let the building attack and cast abilities
+		Builder_SplitterTD:OnConstructionCompleted_ReEnableAttackCapability(unit)
 		unit:RemoveModifierByName("modifier_construction")
 
 		-- Remove item_building_cancel

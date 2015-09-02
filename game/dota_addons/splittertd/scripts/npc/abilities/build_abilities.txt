@@ -45,7 +45,7 @@
 	{
 		"RunScript"
 		{
-			"ScriptFile"	"builder.lua"
+			"ScriptFile"	"buildinghelper/internal/builder.lua"
 			"Function"		"Build"
 		}
 	}
@@ -101,7 +101,7 @@
 	{
 		"RunScript"
 		{
-			"ScriptFile"	"builder.lua"
+			"ScriptFile"	"buildinghelper/internal/builder.lua"
 			"Function"		"Build"
 		}
 	}
@@ -155,7 +155,7 @@
 	{
 		"RunScript"
 		{
-			"ScriptFile"	"builder.lua"
+			"ScriptFile"	"buildinghelper/internal/builder.lua"
 			"Function"		"Build"
 		}
 	}
@@ -219,7 +219,7 @@
 	{
 		"RunScript"
 		{
-			"ScriptFile"	"builder.lua"
+			"ScriptFile"	"buildinghelper/internal/builder.lua"
 			"Function"		"Build"
 		}
 	}

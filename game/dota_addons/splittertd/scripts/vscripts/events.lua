@@ -460,20 +460,12 @@ end
 function SplitterTD:OnGameInProgress()
   DebugPrint("[SPLITTERTD] The game has officially begun")
 
-  SpawnWave()
-  
-  Timers:CreateTimer(30, -- Start this timer 30 game-time seconds later
+  Timers:CreateTimer(0, -- Start this timer 30 game-time seconds later
     function()
       DebugPrint("This function is called 30 seconds after the game begins, and every 30 seconds thereafter")
+      SplitterTD_Spawner:SpawnWave()
       return 30.0 -- Rerun this timer every 30 game-time seconds 
     end)
-end
-
-function SpawnWave()
-  local name = 'wave1'
-  local spawner = Entities:FindByName(nil, 'splitter_spawner_goodguys')
-  local vec = spawner:GetOrigin()
-  local unit = CreateUnitByName(name, vec, true, nil, nil, DOTA_TEAM_NEUTRALS)
 end
 
 -- Called whenever a player changes its current selection, it keeps a list of entity indexes

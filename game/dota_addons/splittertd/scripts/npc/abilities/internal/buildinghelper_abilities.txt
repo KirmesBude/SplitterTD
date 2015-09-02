@@ -14,7 +14,7 @@
 		"RunScript"
 		{
 			"Target"		"POINT"
-			"ScriptFile"	"builder.lua"
+			"ScriptFile"	"buildinghelper/internal/builder.lua"
 			"Function"		"StartBuilding"
 		}
 	}
@@ -36,7 +36,7 @@
 		"RunScript"
 		{
 			"Target"		"POINT"
-			"ScriptFile"	"builder.lua"
+			"ScriptFile"	"buildinghelper/internal/builder.lua"
 			"Function"		"StartBuilding"
 		}
 	}
@@ -58,7 +58,7 @@
 		"RunScript"
 		{
 			"Target"		"POINT"
-			"ScriptFile"	"builder.lua"
+			"ScriptFile"	"buildinghelper/internal/builder.lua"
 			"Function"		"StartBuilding"
 		}
 	}
@@ -80,7 +80,7 @@
 		"RunScript"
 		{
 			"Target"		"POINT"
-			"ScriptFile"	"builder.lua"
+			"ScriptFile"	"buildinghelper/internal/builder.lua"
 			"Function"		"StartBuilding"
 		}
 	}
@@ -102,7 +102,7 @@
 		"RunScript"
 		{
 			"Target"		"POINT"
-			"ScriptFile"	"builder.lua"
+			"ScriptFile"	"buildinghelper/internal/builder.lua"
 			"Function"		"StartBuildingEntity"
 		}
 	}

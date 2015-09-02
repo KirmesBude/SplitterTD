@@ -23,7 +23,7 @@
 	{
 		"RunScript"
 		{
-			"ScriptFile"	"builder.lua"
+			"ScriptFile"	"buildinghelper/internal/builder.lua"
 			"Function"		"RepairStart"
 		}
 	}
@@ -38,7 +38,7 @@
 			{
 				"RunScript"
 				{
-					"ScriptFile"	"builder.lua"
+					"ScriptFile"	"buildinghelper/internal/builder.lua"
 					"Function"		"CancelRepair"
 				}
 			}
@@ -53,13 +53,13 @@
 			{
 				"RunScript"
 				{
-					"ScriptFile"	"builder.lua"
+					"ScriptFile"	"buildinghelper/internal/builder.lua"
 					"Function"		"CancelRepair"
 				}
 				
 				"RunScript"
 				{
-					"ScriptFile"	"builder.lua"
+					"ScriptFile"	"buildinghelper/internal/builder.lua"
 					"Function"		"BuilderRepairing"
 				}
 			}
@@ -68,7 +68,7 @@
 			{
 				"RunScript"
 				{
-					"ScriptFile"	"builder.lua"
+					"ScriptFile"	"buildinghelper/internal/builder.lua"
 					"Function"		"BuilderStopRepairing"
 				}
 			}
@@ -78,7 +78,7 @@
 			{
 				"RunScript"
 				{
-					"ScriptFile"	"builder.lua"
+					"ScriptFile"	"buildinghelper/internal/builder.lua"
 					"Function"		"RepairAnimation"
 				}
 			}	
@@ -93,7 +93,7 @@
 			{
 				"RunScript"
 				{
-					"ScriptFile"	"builder.lua"
+					"ScriptFile"	"buildinghelper/internal/builder.lua"
 					"Function"		"Repair"
 				}
 			}

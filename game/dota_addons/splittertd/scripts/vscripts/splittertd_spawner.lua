@@ -25,11 +25,16 @@ function SplitterTD_Spawner:SpawnWave()
 		DebugPrint('[SPLITTERTD] ' .. name)
 		local spawner_goodguys = Entities:FindByName(nil, 'splitter_spawner_goodguys')
 		local spawner_badguys = Entities:FindByName(nil, 'splitter_spawner_badguys')
+
 		local loc_spawner_goodguys = spawner_goodguys:GetOrigin()
 		local loc_spawner_badguys = spawner_badguys:GetOrigin()
+
 		local unit_goodguys = CreateUnitByName(name, loc_spawner_goodguys, true, nil, nil, DOTA_TEAM_NEUTRALS)
+		unit_goodguys:AddNewModifier(newUnit, nil, "modifier_phased", nil)
 		SplitterTD_Spawner:InitLogic(unit_goodguys, loc_spawner_goodguys)
+
 		local unit_badguys = CreateUnitByName(name, loc_spawner_badguys, true, nil, nil, DOTA_TEAM_NEUTRALS)
+		unit_badguys:AddNewModifier(newUnit, nil, "modifier_phased", nil)
 		SplitterTD_Spawner:InitLogic(unit_badguys, loc_spawner_badguys)
 
 		--SPLITTERTD_SPAWNER_CURRENT = SPLITTERTD_SPAWNER_CURRENT + 1
@@ -86,17 +91,22 @@ end
 function SplitterTD_Spawner:Split(killedUnit)
 	local location = killedUnit:GetAbsOrigin()
 	local waypoint = killedUnit.nextGoalEntity
-	local name = killedUnit:GetName()
+	local name = killedUnit:GetUnitName()
+
+	DebugPrint(name)
 
 	for i=1, 2 do
 		local newUnit = CreateUnitByName(name, location, true, nil, nil, DOTA_TEAM_NEUTRALS)
 		--new_unit:FindClearSpaceForUnit(handle handle_1, Vector Vector_2, bool bool_3)
 
+		--Phase them for 1 frame
+		newUnit:AddNewModifier(newUnit, nil, "modifier_phased", nil)
+
 		--Visually
 		--Pop particle
 
 		--reduce size slightly
-		newUnit:SetModelScale(newUnit:GetModelScale()*0.9)
+		newUnit:SetModelScale(killedUnit:GetModelScale()*0.9)
 		
 		--Pathing
 		newUnit.nextGoalEntity = waypoint

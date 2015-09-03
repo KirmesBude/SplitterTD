@@ -771,7 +771,7 @@
 		"BoundsHullName"			"DOTA_HULL_SIZE_SMALL"
 		"RingRadius"				"40"
 		"CollisionSize"				"16"
-		"FormationRank"				"3"
+		//"FormationRank"			"3"
 			
 		// Movement
 		//----------------------------------------------------------------

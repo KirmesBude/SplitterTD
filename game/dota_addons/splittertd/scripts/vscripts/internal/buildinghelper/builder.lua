@@ -70,7 +70,7 @@ function Build( event )
 		end
 
 		--Intercept here to let the teams only build in their own areas
-		if not Builder_SplitterTD:ValidPosition_Allied_Ground(caster, vPos) then
+		if not ValidPosition_AlliedGround(caster, vPos) then
 			return false
 		end
 
@@ -162,6 +162,9 @@ function Build( event )
 		-- Give the unit their original attack capabilities
 		unit:SetAttackCapability(unit.original_attack)
 		
+		--set refund
+		OnConstructionCompleted_InitRefund(unit)
+
 		-- Let the building attack and cast abilities
 		unit:RemoveModifierByName("modifier_construction")
 

@@ -21,6 +21,8 @@ function UpgradeBuilding( event )
 	building.blockers = blockers
 	building:SetAngles(0, -angle.y, 0)
 
+	UpgradeBuilding_UpdateRefund(event, building)
+	
 	-- If the building to ugprade is selected, change the selection to the new one
 	if IsCurrentlySelected(caster) then
 		AddUnitToSelection(building)

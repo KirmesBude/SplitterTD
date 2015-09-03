@@ -244,7 +244,9 @@ function SplitterTD:OnEntityKilled( keys )
   local damagebits = keys.damagebits -- This might always be 0 and therefore useless
 
   -- Put code here to handle when an entity gets killed
-  SplitterTD_Spawner:Split(killedUnit)
+  if(killedUnit:GetUnitName() == 'wave1') then
+    SplitterTD_Spawner:Split(killedUnit)
+  end
 end
 
 -- This function is called 1 to 2 times as the player connects initially but before they 

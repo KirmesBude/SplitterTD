@@ -10,7 +10,7 @@
 	"Ability3" 					"build_city_center"
 	"Ability4" 					"build_tech_center"
 	"Ability5"					"build_dragon_tower"
-	"Ability6" 					"ultimate_ability"
+	"Ability6" 					"sell"
 	"Ability7"					""
 	"Ability8"					""
 	"Ability9"					""

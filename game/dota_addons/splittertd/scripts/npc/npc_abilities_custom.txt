@@ -735,6 +735,37 @@
 		"AbilityTextureName"			"research_ultimate_ability"
 		"MaxLevel" 						"0"
 	}
+	"sell"
+	{
+		"BaseClass"             		"ability_datadriven"
+		"AbilityTextureName"			"alchemist_goblins_greed"
+		"MaxLevel" 						"1"
+	
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_FRIENDLY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_BUILDING | DOTA_UNIT_TARGET_HERO"
+		"AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_INVULNERABLE"
+	
+		"AbilityMultiOrder"				"1"
+	
+		// Mark this as a BuildingHelper ability to skip CancelQueue when cast
+		"Building"						"1"
+	
+		"precache"
+		{
+			"particle"  "particles\units\heroes\hero_alchemist\alchemist_lasthit_coins.vpcf"
+		}
+	
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"ScriptFile"	"internal/buildinghelper/builder_splittertd.lua"
+				"Function"		"Refund"
+			}
+		}
+	
+	}
 	//SOME COOL ABILITY WITH WISPS
 	"ultimate_ability"
 	{

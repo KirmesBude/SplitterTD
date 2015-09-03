@@ -1,4 +1,4 @@
-require('buildings/upgrades_splittertd')
+require('internal/buildings/upgrades_splittertd')
 
 --[[
 	Replaces the building to the upgraded unit name

@@ -244,6 +244,7 @@ function SplitterTD:OnEntityKilled( keys )
   local damagebits = keys.damagebits -- This might always be 0 and therefore useless
 
   -- Put code here to handle when an entity gets killed
+  SplitterTD_Spawner:Split(killedUnit)
 end
 
 -- This function is called 1 to 2 times as the player connects initially but before they 
@@ -330,6 +331,9 @@ function SplitterTD:OnNPCGoalReached(keys)
   local goalEntity = EntIndexToHScript(keys.goal_entindex)
   local nextGoalEntity = EntIndexToHScript(keys.next_goal_entindex)
   local npc = EntIndexToHScript(keys.npc_entindex)
+
+  --for SplitterTD wave logic
+  npc.nextGoalEntity = nextGoalEntity
 end
 
 --[[

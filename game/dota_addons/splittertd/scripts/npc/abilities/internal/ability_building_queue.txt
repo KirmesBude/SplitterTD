@@ -17,7 +17,7 @@
 			{
 				"RunScript"
 				{
-					"ScriptFile"	"buildings/internal/queue.lua"
+					"ScriptFile"	"internal/buildings/queue.lua"
 					"Function"		"AdvanceQueue"
 				}
 			}

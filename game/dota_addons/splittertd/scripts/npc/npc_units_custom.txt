@@ -812,9 +812,5 @@
 				"Wearable5" 	{	"ItemDef"		"10"		} //Boots
 			}
 		}
-	
-		// Creature AI
-		//----------------------------------------------------------------
-		"vscripts"	"ai/simple_wave_ai.lua"
 	}
 }

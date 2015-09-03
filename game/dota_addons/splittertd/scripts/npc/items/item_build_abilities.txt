@@ -46,7 +46,7 @@
 	{
 		"RunScript"
 		{
-			"ScriptFile"	"builder.lua"
+			"ScriptFile"	"internal/buildinghelper/builder.lua"
 			"Function"		"Build"
 			"ItemUnitName"  "wall"
 		}

@@ -20,7 +20,6 @@ end
 function SplitterTD_Spawner:SpawnWave()
 	DebugPrint('[SPLITTERTD] Spawn Wave')
 	if waves and #waves ~= 0 then
-		DebugPrint('[SPLITTERTD] 2')
 		--local name = table.remove(waves, 1)
 		local name = waves[1]
 		DebugPrint('[SPLITTERTD] ' .. name)
@@ -42,60 +41,17 @@ function SplitterTD_Spawner:SpawnWave()
 end
 
 --better use OnNPCGoalReached!!
-function SplitterTD_Spawner:FindNearestWayPoint(location)
-
-	local waypoint1 = Entities:FindByNameNearest( "*wp*", location, 0 )
-	local way = waypoint1:GetAbsOrigin()-location
-	local waypoint2 = Entities:FindByNameWithin(waypoint1, "*wp*", location, 2*way:__len())
-
-	if waypoint2 == nil then
-		return waypoint1
-	end
-
-	local bGood = string.find(waypoint1:GetName(), "good")
-	local startP
-
-	if bGood then
-		startP = 30
-	else
-		startP = 29
-	end
-
-	local wayp1name = string.sub(waypoint1:GetName(), 30)
-	local num1
-	if wayp1name ~= 'end' then
-		num1 = tonumber(wayp1name)
-	else
-		return waypoint1	
-	end
-
-	local wayp2name = string.sub(waypoint2:GetName(), 30)
-	local num2
-	if wayp2name ~= 'end' then
-		num2 = tonumber(wayp2name)
-	else
-		return waypoint2
-	end
-
-	if mum2 > num1 then
-		return waypoint2
-	else
-		return waypoint1
-	end
-
-	return nil
+function SplitterTD_Spawner:FindNextWayPoint(unit, location)
+	
+	return unit.nextGoalEntity or Entities:FindByNameNearest('*wp*', location, 0)
 end
 
-
-function SplitterTD_Spawner:InitLogic(unit, location)
+function SplitterTD_Spawner:InitWaypoint(unit, waypoint)
 	order = {}
 	order.UnitIndex = unit:entindex()
 	order.OrderType = DOTA_UNIT_ORDER_MOVE_TO_POSITION
 	order.Queue = false
 
-	-- Find the closest waypoint, use it as a goal entity if we can
-	local waypoint = SplitterTD_Spawner:FindNearestWayPoint(location)
-	
 	--local waypoint = Entities:FindByNameNearest('*wp*', thisEntity:GetAbsOrigin(), 0)
 
 	if waypoint then
@@ -118,4 +74,33 @@ function SplitterTD_Spawner:InitLogic(unit, location)
 
 	ExecuteOrderFromTable(order)
 
+end
+
+function SplitterTD_Spawner:InitLogic(unit, location)
+	-- Find the closest waypoint, use it as a goal entity if we can
+	local waypoint = SplitterTD_Spawner:FindNextWayPoint(unit, location)
+	
+	SplitterTD_Spawner:InitWaypoint(unit, waypoint)
+end
+
+function SplitterTD_Spawner:Split(killedUnit)
+	local location = killedUnit:GetAbsOrigin()
+	local waypoint = killedUnit.nextGoalEntity
+	local name = killedUnit:GetName()
+
+	for i=1, 2 do
+		local newUnit = CreateUnitByName(name, location, true, nil, nil, DOTA_TEAM_NEUTRALS)
+		--new_unit:FindClearSpaceForUnit(handle handle_1, Vector Vector_2, bool bool_3)
+
+		--Visually
+		--Pop particle
+
+		--reduce size slightly
+		newUnit:SetModelScale(newUnit:GetModelScale()*0.9)
+		
+		--Pathing
+		newUnit.nextGoalEntity = waypoint
+		SplitterTD_Spawner:InitLogic(newUnit, location)
+
+	end
 end

@@ -13,7 +13,7 @@
 	{
 		"RunScript"
 		{
-			"ScriptFile"	"builder.lua"
+			"ScriptFile"	"internal/buildinghelper/builder.lua"
 			"Function"		"CancelBuilding"
 		}
 	}

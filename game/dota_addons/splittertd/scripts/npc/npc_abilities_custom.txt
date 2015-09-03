@@ -39,13 +39,13 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/queue.lua"
+				"ScriptFile"	"internal/buildings/queue.lua"
 				"Function"		"EnqueueUnit"
 			}
 	
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/upgrades.lua"
+				"ScriptFile"	"internal/buildings/upgrades.lua"
 				"Function"		"StartUpgrade"
 				"ModifierName"	"modifier_building_particle"
 			}
@@ -56,13 +56,13 @@
 			// Consume the first item in the queue
 			"RunScript"
 			{
-				"ScriptFile"   	"buildings/internal/queue.lua"
+				"ScriptFile"   	"internal/buildings/queue.lua"
 				"Function"      "NextQueue"
 			}
 	
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/upgrades.lua"
+				"ScriptFile"	"internal/buildings/upgrades.lua"
 				"Function"		"UpgradeBuilding"
 				"UnitName"		"city_center_tier2"
 			}		
@@ -134,13 +134,13 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/queue.lua"
+				"ScriptFile"	"internal/buildings/queue.lua"
 				"Function"		"EnqueueUnit"
 			}
 	
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/upgrades.lua"
+				"ScriptFile"	"internal/buildings/upgrades.lua"
 				"Function"		"StartUpgrade"
 				"ModifierName"	"modifier_building_particle"
 			}
@@ -151,13 +151,13 @@
 			// Consume the first item in the queue
 			"RunScript"
 			{
-				"ScriptFile"   	"buildings/internal/queue.lua"
+				"ScriptFile"   	"internal/buildings/queue.lua"
 				"Function"      "NextQueue"
 			}
 	
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/upgrades.lua"
+				"ScriptFile"	"internal/buildings/upgrades.lua"
 				"Function"		"UpgradeBuilding"
 				"UnitName"		"tower_tier2"
 			}		
@@ -200,13 +200,13 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/queue.lua"
+				"ScriptFile"	"internal/buildings/queue.lua"
 				"Function"		"EnqueueUnit"
 			}
 	
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/upgrades.lua"
+				"ScriptFile"	"internal/buildings/upgrades.lua"
 				"Function"		"StartUpgrade"
 				"ModifierName"	"modifier_building_particle"
 			}
@@ -217,13 +217,13 @@
 			// Consume the first item in the queue
 			"RunScript"
 			{
-				"ScriptFile"   	"buildings/internal/queue.lua"
+				"ScriptFile"   	"internal/buildings/queue.lua"
 				"Function"      "NextQueue"
 			}
 	
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/upgrades.lua"
+				"ScriptFile"	"internal/buildings/upgrades.lua"
 				"Function"		"UpgradeBuilding"
 				"UnitName"		"dark_tower"
 			}		
@@ -320,7 +320,7 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"	"buildinghelper/internal/builder.lua"
+				"ScriptFile"	"internal/buildinghelper/builder.lua"
 				"Function"		"Build"
 			}
 		}
@@ -376,7 +376,7 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"	"buildinghelper/internal/builder.lua"
+				"ScriptFile"	"internal/buildinghelper/builder.lua"
 				"Function"		"Build"
 			}
 		}
@@ -430,7 +430,7 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"	"buildinghelper/internal/builder.lua"
+				"ScriptFile"	"internal/buildinghelper/builder.lua"
 				"Function"		"Build"
 			}
 		}
@@ -494,7 +494,7 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"	"buildinghelper/internal/builder.lua"
+				"ScriptFile"	"internal/buildinghelper/builder.lua"
 				"Function"		"Build"
 			}
 		}
@@ -531,7 +531,7 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"	"buildinghelper/internal/builder.lua"
+				"ScriptFile"	"internal/buildinghelper/builder.lua"
 				"Function"		"RepairStart"
 			}
 		}
@@ -546,7 +546,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"buildinghelper/internal/builder.lua"
+						"ScriptFile"	"internal/buildinghelper/builder.lua"
 						"Function"		"CancelRepair"
 					}
 				}
@@ -561,13 +561,13 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"buildinghelper/internal/builder.lua"
+						"ScriptFile"	"internal/buildinghelper/builder.lua"
 						"Function"		"CancelRepair"
 					}
 					
 					"RunScript"
 					{
-						"ScriptFile"	"buildinghelper/internal/builder.lua"
+						"ScriptFile"	"internal/buildinghelper/builder.lua"
 						"Function"		"BuilderRepairing"
 					}
 				}
@@ -576,7 +576,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"buildinghelper/internal/builder.lua"
+						"ScriptFile"	"internal/buildinghelper/builder.lua"
 						"Function"		"BuilderStopRepairing"
 					}
 				}
@@ -586,7 +586,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"buildinghelper/internal/builder.lua"
+						"ScriptFile"	"internal/buildinghelper/builder.lua"
 						"Function"		"RepairAnimation"
 					}
 				}	
@@ -601,7 +601,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"buildinghelper/internal/builder.lua"
+						"ScriptFile"	"internal/buildinghelper/builder.lua"
 						"Function"		"Repair"
 					}
 				}
@@ -642,13 +642,13 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/queue.lua"
+				"ScriptFile"	"internal/buildings/queue.lua"
 				"Function"		"EnqueueUnit"
 			}
 	
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/research.lua"
+				"ScriptFile"	"internal/buildings/research.lua"
 				"Function"		"DisableResearch"
 			}
 		}
@@ -657,13 +657,13 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"   	"buildings/internal/queue.lua"
+				"ScriptFile"   	"internal/buildings/queue.lua"
 				"Function"      "NextQueue"
 			}
 	
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/research.lua"
+				"ScriptFile"	"internal/buildings/research.lua"
 				"Function"		"ResearchComplete"
 			}
 		}
@@ -703,13 +703,13 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/queue.lua"
+				"ScriptFile"	"internal/buildings/queue.lua"
 				"Function"		"EnqueueUnit"
 			}
 	
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/research.lua"
+				"ScriptFile"	"internal/buildings/research.lua"
 				"Function"		"DisableResearch"
 			}
 		}
@@ -718,13 +718,13 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"   	"buildings/internal/queue.lua"
+				"ScriptFile"   	"internal/buildings/queue.lua"
 				"Function"      "NextQueue"
 			}
 	
 			"RunScript"
 			{
-				"ScriptFile"	"buildings/internal/research.lua"
+				"ScriptFile"	"internal/buildings/research.lua"
 				"Function"		"ResearchComplete"
 			}
 		}
@@ -834,7 +834,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"buildings/internal/queue.lua"
+						"ScriptFile"	"internal/buildings/queue.lua"
 						"Function"		"AdvanceQueue"
 					}
 				}
@@ -857,7 +857,7 @@
 			"RunScript"
 			{
 				"Target"		"POINT"
-				"ScriptFile"	"buildinghelper/internal/builder.lua"
+				"ScriptFile"	"internal/buildinghelper/builder.lua"
 				"Function"		"StartBuilding"
 			}
 		}
@@ -879,7 +879,7 @@
 			"RunScript"
 			{
 				"Target"		"POINT"
-				"ScriptFile"	"buildinghelper/internal/builder.lua"
+				"ScriptFile"	"internal/buildinghelper/builder.lua"
 				"Function"		"StartBuilding"
 			}
 		}
@@ -901,7 +901,7 @@
 			"RunScript"
 			{
 				"Target"		"POINT"
-				"ScriptFile"	"buildinghelper/internal/builder.lua"
+				"ScriptFile"	"internal/buildinghelper/builder.lua"
 				"Function"		"StartBuilding"
 			}
 		}
@@ -923,7 +923,7 @@
 			"RunScript"
 			{
 				"Target"		"POINT"
-				"ScriptFile"	"buildinghelper/internal/builder.lua"
+				"ScriptFile"	"internal/buildinghelper/builder.lua"
 				"Function"		"StartBuilding"
 			}
 		}
@@ -945,7 +945,7 @@
 			"RunScript"
 			{
 				"Target"		"POINT"
-				"ScriptFile"	"buildinghelper/internal/builder.lua"
+				"ScriptFile"	"internal/buildinghelper/builder.lua"
 				"Function"		"StartBuildingEntity"
 			}
 		}

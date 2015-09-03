@@ -15,14 +15,14 @@
 	{
 		"RunScript"
 		{
-			"ScriptFile"	"buildings/queue.lua"
+			"ScriptFile"	"internal/buildings/queue.lua"
 			"Function"		"DequeueUnit"
 		}
 
 		// Re-enable research ability
 		"RunScript"
 		{
-			"ScriptFile"	"buildings/research.lua"
+			"ScriptFile"	"internal/buildings/research.lua"
 			"Function"		"ReEnableResearch"
 		}
 	}
@@ -43,14 +43,14 @@
 	{
 		"RunScript"
 		{
-			"ScriptFile"	"buildings/queue.lua"
+			"ScriptFile"	"internal/buildings/queue.lua"
 			"Function"		"DequeueUnit"
 		}
 
 		// Re-enable research ability
 		"RunScript"
 		{
-			"ScriptFile"	"buildings/research.lua"
+			"ScriptFile"	"internal/buildings/research.lua"
 			"Function"		"ReEnableResearch"
 		}
 	}
@@ -71,14 +71,14 @@
 	{
 		"RunScript"
 		{
-			"ScriptFile"	"buildings/queue.lua"
+			"ScriptFile"	"internal/buildings/queue.lua"
 			"Function"		"DequeueUnit"
 		}
 
 		// Re-enable abilities
 		"RunScript"
 		{
-			"ScriptFile"	"buildings/upgrades.lua"
+			"ScriptFile"	"internal/buildings/upgrades.lua"
 			"Function"		"CancelUpgrade"
 		}
 
@@ -106,14 +106,14 @@
 	{
 		"RunScript"
 		{
-			"ScriptFile"	"buildings/queue.lua"
+			"ScriptFile"	"internal/buildings/queue.lua"
 			"Function"		"DequeueUnit"
 		}
 
 		// Re-enable abilities
 		"RunScript"
 		{
-			"ScriptFile"	"buildings/upgrades.lua"
+			"ScriptFile"	"internal/buildings/upgrades.lua"
 			"Function"		"CancelUpgrade"
 		}
 
@@ -140,14 +140,14 @@
 	{
 		"RunScript"
 		{
-			"ScriptFile"	"buildings/queue.lua"
+			"ScriptFile"	"internal/buildings/queue.lua"
 			"Function"		"DequeueUnit"
 		}
 
 		// Re-enable abilities
 		"RunScript"
 		{
-			"ScriptFile"	"buildings/upgrades.lua"
+			"ScriptFile"	"internal/buildings/upgrades.lua"
 			"Function"		"CancelUpgrade"
 		}
 

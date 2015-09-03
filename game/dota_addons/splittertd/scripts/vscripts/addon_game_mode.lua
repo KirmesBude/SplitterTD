@@ -36,15 +36,15 @@ require('splittertd_spawner')
 
 
 --Buildinghelper library
-require('buildinghelper/internal/upgrades')
-require('buildinghelper/internal/mechanics')
-require('buildinghelper/internal/orders')
-require('buildinghelper/internal/builder')
-require('buildinghelper/internal/buildinghelper')
+require('internal/buildinghelper/upgrades')
+require('internal/buildinghelper/mechanics')
+require('internal/buildinghelper/orders')
+require('internal/buildinghelper/builder')
+require('internal/buildinghelper/buildinghelper')
 
 --Buildinghelper splittertd extension
-require('buildinghelper/buildinghelper_splittertd')
-require('buildinghelper/builder_splittertd')
+require('internal/buildinghelper/buildinghelper_splittertd')
+require('internal/buildinghelper/builder_splittertd')
 
 
 function Precache( context )

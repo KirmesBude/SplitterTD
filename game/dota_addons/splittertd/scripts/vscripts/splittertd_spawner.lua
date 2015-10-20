@@ -8,20 +8,27 @@ local SPLITTERTD_SPAWNER_CURRENT
 
 local waves = {}
 
---use loadkv instead
+--[[ Author: Bude
+	 Date: 20.10.2015
+	 Initializes Waves from kv]]
 function SplitterTD_Spawner:Init()
-	for i=1, SPLITTERTD_SPAWNER_WAVES, 1 do
-		table.insert(waves, 'wave'..i)
-	end
+	waves = LoadKeyValues("scripts/kv/splitter_waves.kv")
 
 	SPLITTERTD_SPAWNER_CURRENT = 0
 end
 
+--[[ Author: Bude
+	 Date: 20.10.2015
+	 Spawns current wave]]
 function SplitterTD_Spawner:SpawnWave()
 	DebugPrint('[SPLITTERTD] Spawn Wave')
 	if waves and #waves ~= 0 then
 		--local name = table.remove(waves, 1)
-		local name = waves[1]
+		local current_wave = table.remove(waves, 1)
+		local wave_name = current_wave.name
+		local wave_unit_name = current_wave.unit_name
+		local wave_unit_amount = current_wave.unit_amount
+		local wave_unit_type = current_wave.unit_type
 		DebugPrint('[SPLITTERTD] ' .. name)
 		local spawner_goodguys = Entities:FindByName(nil, 'splitter_spawner_goodguys')
 		local spawner_badguys = Entities:FindByName(nil, 'splitter_spawner_badguys')
@@ -29,13 +36,11 @@ function SplitterTD_Spawner:SpawnWave()
 		local loc_spawner_goodguys = spawner_goodguys:GetOrigin()
 		local loc_spawner_badguys = spawner_badguys:GetOrigin()
 
-		local unit_goodguys = CreateUnitByName(name, loc_spawner_goodguys, true, nil, nil, DOTA_TEAM_NEUTRALS)
-		unit_goodguys:AddNewModifier(newUnit, nil, "modifier_phased", nil)
-		SplitterTD_Spawner:InitLogic(unit_goodguys, loc_spawner_goodguys)
+		local tLocations = {}
+		tLocations.goodguys = loc_spawner_goodguys
+		tLocations.badguys = loc_spawner_badguys
 
-		local unit_badguys = CreateUnitByName(name, loc_spawner_badguys, true, nil, nil, DOTA_TEAM_NEUTRALS)
-		unit_badguys:AddNewModifier(newUnit, nil, "modifier_phased", nil)
-		SplitterTD_Spawner:InitLogic(unit_badguys, loc_spawner_badguys)
+		_Spawn(wave_unit_name, tLocations, wave_unit_amount)
 
 		--SPLITTERTD_SPAWNER_CURRENT = SPLITTERTD_SPAWNER_CURRENT + 1
 		return SPLITTERTD_SPAWNER_CURRENT
@@ -45,12 +50,34 @@ function SplitterTD_Spawner:SpawnWave()
 	return 0
 end
 
---better use OnNPCGoalReached!!
+--[[ Author: Bude
+	 Date: 20.10.2015
+	 Spawns Splitter Creeps]]
+function SplitterTD_Spawner:Spawn(sUnit_name, tLocations, nAmount)
+	local loc_spawner_goodguys = tLocations.goodguys
+	local loc_spawner_badguys = tLocations.badguys
+
+	local unit_goodguys = CreateUnitByName(sUnit_name, loc_spawner_goodguys, true, nil, nil, DOTA_TEAM_NEUTRALS)
+	--unit_goodguys:AddNewModifier(newUnit, nil, "modifier_phased", nil)
+	SplitterTD_Spawner:InitLogic(unit_goodguys, loc_spawner_goodguys)
+
+	local unit_badguys = CreateUnitByName(sUnit_name, loc_spawner_badguys, true, nil, nil, DOTA_TEAM_NEUTRALS)
+	--unit_badguys:AddNewModifier(newUnit, nil, "modifier_phased", nil)
+	SplitterTD_Spawner:InitLogic(unit_badguys, loc_spawner_badguys)
+end
+
+--[[ Author: Bude
+	 Date: 20.10.2015
+	 See scripts/events.lua --function OnNPCGoalReached
+	 Returns nearest and next in order waypoint for split units]]
 function SplitterTD_Spawner:FindNextWayPoint(unit, location)
 	
 	return unit.nextGoalEntity or Entities:FindByNameNearest('*wp*', location, 0)
 end
 
+--[[ Author: Bude
+	 Date: 20.10.2015
+	 Initializes the first waypoint for the given unit to the given waypoint]]
 function SplitterTD_Spawner:InitWaypoint(unit, waypoint)
 	order = {}
 	order.UnitIndex = unit:entindex()
@@ -81,6 +108,9 @@ function SplitterTD_Spawner:InitWaypoint(unit, waypoint)
 
 end
 
+--[[ Author: Bude
+	 Date: 20.10.2015
+	 Sets the AI for splitter creeps]]
 function SplitterTD_Spawner:InitLogic(unit, location)
 	-- Find the closest waypoint, use it as a goal entity if we can
 	local waypoint = SplitterTD_Spawner:FindNextWayPoint(unit, location)
@@ -88,6 +118,9 @@ function SplitterTD_Spawner:InitLogic(unit, location)
 	SplitterTD_Spawner:InitWaypoint(unit, waypoint)
 end
 
+--[[ Author: Bude
+	 Date: 20.10.2015
+	 Splits Unit in 2]]
 function SplitterTD_Spawner:Split(killedUnit)
 	local location = killedUnit:GetAbsOrigin()
 	local waypoint = killedUnit.nextGoalEntity

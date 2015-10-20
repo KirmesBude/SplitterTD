@@ -152,6 +152,8 @@ function SplitterTD:OnLastHit(keys)
   local isTowerKill = keys.TowerKill == 1
   local player = PlayerResource:GetPlayer(keys.PlayerID)
   local killedEnt = EntIndexToHScript(keys.EntKilled)
+
+  SplitterTD_Spawner:Split(killedEnt)
 end
 
 -- A tree was cut down by tango, quelling blade, etc
@@ -242,11 +244,6 @@ function SplitterTD:OnEntityKilled( keys )
   end
 
   local damagebits = keys.damagebits -- This might always be 0 and therefore useless
-
-  -- Put code here to handle when an entity gets killed
-  if(killedUnit:GetUnitName() == 'wave1') then
-    SplitterTD_Spawner:Split(killedUnit)
-  end
 end
 
 -- This function is called 1 to 2 times as the player connects initially but before they 

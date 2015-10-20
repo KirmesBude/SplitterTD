@@ -28,6 +28,7 @@ function SplitterTD:InitGameMode()
   	GameRules.HeroKV = LoadKeyValues("scripts/npc/npc_heroes_custom.txt")
   	GameRules.ItemKV = LoadKeyValues("scripts/npc/npc_items_custom.txt")
   	GameRules.Requirements = LoadKeyValues("scripts/kv/tech_tree.kv")
+  	GameRules.Waves = LoadKeyValues("scripts/kv/splitter_waves.kv")
 
   	-- Store and update selected units of each pID
 	GameRules.SELECTED_UNITS = {}

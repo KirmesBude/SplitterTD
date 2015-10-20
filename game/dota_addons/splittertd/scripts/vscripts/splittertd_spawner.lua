@@ -6,14 +6,13 @@ end
 local SPLITTERTD_SPAWNER_WAVES = 42
 local SPLITTERTD_SPAWNER_CURRENT
 
-local waves = {}
-
 --[[ Author: Bude
 	 Date: 20.10.2015
 	 Initializes Waves from kv]]
 function SplitterTD_Spawner:Init()
-	waves = LoadKeyValues("scripts/kv/splitter_waves.kv")
-
+	DebugPrint('[SPLITTERSPAWNER] INIT')
+	
+	self.waves = LoadKeyValues("scripts/kv/splitter_waves.kv")
 	SPLITTERTD_SPAWNER_CURRENT = 0
 end
 
@@ -21,15 +20,19 @@ end
 	 Date: 20.10.2015
 	 Spawns current wave]]
 function SplitterTD_Spawner:SpawnWave()
-	DebugPrint('[SPLITTERTD] Spawn Wave')
-	if waves and #waves ~= 0 then
+	DebugPrint('[SPLITTERTD] Spawn Wave')	
+	DebugPrintTable(self.waves)
+
+	local current_wave = self.waves["1"]
+	DebugPrintTable(current_wave)
+	if current_wave ~= nil then
+		print("HALLO")
 		--local name = table.remove(waves, 1)
-		local current_wave = table.remove(waves, 1)
 		local wave_name = current_wave.name
 		local wave_unit_name = current_wave.unit_name
 		local wave_unit_amount = current_wave.unit_amount
 		local wave_unit_type = current_wave.unit_type
-		DebugPrint('[SPLITTERTD] ' .. name)
+		DebugPrint('[SPLITTERTD] ' .. wave_unit_name)
 		local spawner_goodguys = Entities:FindByName(nil, 'splitter_spawner_goodguys')
 		local spawner_badguys = Entities:FindByName(nil, 'splitter_spawner_badguys')
 
@@ -40,7 +43,7 @@ function SplitterTD_Spawner:SpawnWave()
 		tLocations.goodguys = loc_spawner_goodguys
 		tLocations.badguys = loc_spawner_badguys
 
-		_Spawn(wave_unit_name, tLocations, wave_unit_amount)
+		SplitterTD_Spawner:Spawn(wave_unit_name, tLocations, wave_unit_amount)
 
 		--SPLITTERTD_SPAWNER_CURRENT = SPLITTERTD_SPAWNER_CURRENT + 1
 		return SPLITTERTD_SPAWNER_CURRENT
@@ -57,6 +60,7 @@ function SplitterTD_Spawner:Spawn(sUnit_name, tLocations, nAmount)
 	local loc_spawner_goodguys = tLocations.goodguys
 	local loc_spawner_badguys = tLocations.badguys
 
+	print("Spawning units with name:"..sUnit_name)
 	local unit_goodguys = CreateUnitByName(sUnit_name, loc_spawner_goodguys, true, nil, nil, DOTA_TEAM_NEUTRALS)
 	--unit_goodguys:AddNewModifier(newUnit, nil, "modifier_phased", nil)
 	SplitterTD_Spawner:InitLogic(unit_goodguys, loc_spawner_goodguys)
@@ -133,7 +137,7 @@ function SplitterTD_Spawner:Split(killedUnit)
 		--new_unit:FindClearSpaceForUnit(handle handle_1, Vector Vector_2, bool bool_3)
 
 		--Phase them for 1 frame
-		newUnit:AddNewModifier(newUnit, nil, "modifier_phased", nil)
+		--newUnit:AddNewModifier(newUnit, nil, "modifier_phased", nil)
 
 		--Visually
 		--Pop particle

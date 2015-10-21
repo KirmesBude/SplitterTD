@@ -12,6 +12,8 @@ local SPLITTERTD_SPAWNER_CURRENT
 function SplitterTD_Spawner:Init()
 	DebugPrint('[SPLITTERSPAWNER] INIT')
 	
+	-- Alt+RightClick moving
+	SendToServerConsole("dota_unit_allow_moveto_direction 1")
 	self.waves = LoadKeyValues("scripts/kv/splitter_waves.kv")
 	SPLITTERTD_SPAWNER_CURRENT = 0
 end
@@ -86,7 +88,7 @@ function SplitterTD_Spawner:InitWaypoint(unit, waypoint)
 	order = {}
 	order.UnitIndex = unit:entindex()
 	order.OrderType = DOTA_UNIT_ORDER_MOVE_TO_POSITION
-	order.Queue = false
+	order.Queue = true
 
 	--local waypoint = Entities:FindByNameNearest('*wp*', thisEntity:GetAbsOrigin(), 0)
 
